@@ -1,0 +1,58 @@
+package Study.Lambda;
+
+import com.company.experiment4.Person;
+
+/**
+ * @Description
+ * @Author zdk
+ * @Date 2020/10/18 19:15
+ */
+//比较
+interface comp{
+    public boolean cmp(Person p);
+}
+
+//返回iD大于年龄的Person对象
+public class Anonymous_class_And_Lambda {
+    public static void main(String[] args)
+    {
+        Person[] p=new Person[3];
+        p[0]=new Person("10", "张三", "11");
+        p[1]=new Person("18", "张三", "13");
+        p[2]=new Person("15", "张三", "14");
+        /**使用匿名类实现
+        comp c=new comp() {
+            @Override
+            public boolean cmp(Person p) {
+                return (Integer.parseInt(p.getId())>Integer.parseInt(p.getAge()));
+            }
+        };
+        out(p,c);
+        */
+        //使用Lambda表达式实现
+        out(p,p1->Integer.parseInt(p1.getId())>Integer.parseInt(p1.getAge()));
+        /**由匿名类向Lambda表达式的转化过程
+         * 先将new comp(),方法名,方法返回类型信息去掉,保留方法参数和方法体,
+         * 参数和方法体之间加上->符号
+         */
+        comp c1=(Person person1)->{
+            return (Integer.parseInt(person1.getId())>Integer.parseInt(person1.getAge()));
+        };
+        /**再把return和{}去掉
+         */
+comp c2=(Person person2)->(Integer.parseInt(person2.getId())>Integer.parseInt(person2.getAge()));
+        /**把参数类型和圆括号去掉
+         */
+        comp c3=person3->(Integer.parseInt(person3.getId())>Integer.parseInt(person3.getAge()));
+        //把c3作为参数传进out方法
+        out(p,c3);
+        //直接把表达式传进去
+        out(p,person3->(Integer.parseInt(person3.getId())>Integer.parseInt(person3.getAge())));
+    }
+    private static void out(Person[] p,comp c) {
+        for(Person pp:p)
+            if(c.cmp(pp))
+                System.out.printf("id为:%s,name为:%s,age为:%s\n",
+                        pp.getId(),pp.getName(),pp.getAge());
+    }
+}
